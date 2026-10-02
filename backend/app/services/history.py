@@ -6,10 +6,18 @@ from sqlalchemy import select
 from app.models.db import ClickLog, PriceHistory, SessionLocal
 from app.models.schemas import Product
 
+_ready = False
+
+
+async def _ensure() -> None:
+    global _ready
+    if not _ready:
+        from app.models.db import init_db
+        await init_db()
+        _ready = True
 
 def qhash(clean: str) -> str:
     return hashlib.sha1(clean.encode()).hexdigest()
-
 
 async def save_points(query_hash: str, query: str, products: list[Product]) -> None:
     async with SessionLocal() as s:
