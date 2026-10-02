@@ -127,11 +127,3 @@ This project is for academic demonstration only. Read each site's Terms of Servi
 
 ## Limitations & future work
 Limitations: selectors break when sites change, datacenter IPs get blocked, and product matching is fuzzy. Future work: price alerts, official affiliate feeds, ML-based product matching and a browser extension.
-
-## Viva cheat-sheet
-* **Why Playwright instead of requests?** Some stores render their pages with JavaScript. Playwright runs a real browser, waits for elements to appear and captures the XHR JSON. httpx is used for server-rendered sites because it is faster.
-* **Why Redis?** It is a fast, shared store for the cache, the stampede lock and the rate-limit counters across server workers.
-* **How does caching work?** The key is `search:v1:sha1(clean query)` with a 30-minute TTL. A lock (`SET NX EX`) makes sure concurrent identical searches trigger only one scrape.
-* **How does rate limiting work?** A sliding window built on a sorted set (ZSET) per IP: 10 searches per minute and 100 per hour, returning 429 with `Retry-After`. A separate per-domain delay of 2 s plus jitter keeps scraping polite.
-* **How is the ranking computed?** Score = 0.45·price + 0.20·discount + 0.15·Bayesian rating + 0.10·delivery + 0.10·trust. Each part is normalized to 0–100.
-* **How is blocking handled?** The scraper detects the block and retries once with a new browser context and user agent. If it is still blocked, it uses the Google snippet price, then the last known price (marked stale), then reports the store as "blocked". If every store fails, the app falls back to demo data.
