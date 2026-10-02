@@ -2,7 +2,7 @@
 
 Academic project (Data Engineering Honours, *Web Scraping & APIs*). You search for a product. PriceVerse finds it on Google and on 8 Indian stores, scrapes and cleans the listings, ranks them, and links you to the best deal.
 
-> Screenshots: add `docs/hero.png`, `docs/results.png` here.
+## Link : https://priceverse-ui.vercel.app/
 
 ## Features
 * Discovery through SerpAPI and Google CSE, then parallel scraping of 8 stores with Playwright and httpx.
