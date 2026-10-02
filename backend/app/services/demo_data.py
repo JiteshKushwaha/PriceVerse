@@ -56,6 +56,12 @@ def match_catalog(query: str):
             best, score = item, s
     return best if score >= 0.55 else None
 
+GENERIC_BASE = [
+    (("sanitizer", "soap", "handwash", "shampoo", "toothpaste", "cream", "oil"), 199),
+    (("book", "pen", "notebook", "bottle", "bag", "mouse", "cable"), 499),
+    (("shirt", "jeans", "shoes", "watch", "dress"), 1499),
+]
+
 def generate_items(query: str) -> dict[str, list[dict]]:
     """Returns {site: [raw product dicts]} with realistic variation. URLs are real site search pages."""
     item = match_catalog(query)
@@ -63,7 +69,10 @@ def generate_items(query: str) -> dict[str, list[dict]]:
         _, name, base, mrp, cat, specs = item
     else:
         rnd0 = random.Random(_seed(query))
-        base = rnd0.choice([799, 1499, 2999, 7999, 14999, 29999, 49999])
+        # base = rnd0.choice([799, 1499, 2999, 7999, 14999, 29999, 49999])
+        q = query.lower()
+        base = next((b for kws, b in GENERIC_BASE if any(k in q for k in kws)),
+                    rnd0.choice([299, 499, 799, 1299, 1999]))
         mrp, cat, specs = int(base * rnd0.uniform(1.2, 1.8)), "e", {"Category": "General"}
         name = query.strip().title()
     sites = ELECTRONICS if cat == "e" else FASHION
@@ -78,7 +87,7 @@ def generate_items(query: str) -> dict[str, list[dict]]:
                 "name": name if v == 0 else f"{name} (Renewed Box)" if cat == "e" else f"{name} - Combo",
                 "price": float(price if v == 0 else round(price * 1.06)), "mrp": float(mrp),
                 "url": site_search_url(site, query) + ("" if v == 0 else "&v=2"),
-                "image_url": None, "rating": round(rnd.uniform(3.9, 4.7), 1),
+                "image_url": f"https://placehold.co/400x400/101428/FFD60A?text={quote_plus(site.split('.')[0])}", "rating": round(rnd.uniform(3.9, 4.7), 1),
                 "review_count": rnd.randint(40, 25000), "delivery_text":
                     f"{'FREE ' if rnd.random() > 0.3 else ''}Delivery in {days} days",
                 "offers_text": rnd.sample(OFFERS, k=rnd.randint(1, 3)), "specs": specs,
