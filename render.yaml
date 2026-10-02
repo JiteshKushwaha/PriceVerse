@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: priceverse-api
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    plan: starter            # free plan has 512 MB; Chromium works better with 1 GB+
+    healthCheckPath: /api/health
+    envVars:
+      - key: DEMO_MODE
+        value: "false"
+      - key: REDIS_URL
+        sync: false          # paste your Upstash / Render Key Value URL
+      - key: ALLOWED_ORIGINS
+        sync: false          # e.g. https://priceverse.vercel.app
+      - key: SERPAPI_KEY
+        sync: false
+      - key: DATABASE_URL
+        value: sqlite+aiosqlite:////app/data/prices.db
