@@ -22,8 +22,16 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(title="PriceVerse: E-Commerce Price Comparison & Product Recommendation System",
               version="1.0.0", lifespan=lifespan)
-app.add_middleware(CORSMiddleware, allow_origins=settings.origins, allow_credentials=False,
-                   allow_methods=["GET", "POST"], allow_headers=["*"], expose_headers=["Retry-After", "X-Request-ID"])
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://priceverse-ui.vercel.app",
+    ],
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+    expose_headers=["Retry-After", "X-Request-ID"],
+)
 
 @app.middleware("http")
 async def request_id(request: Request, call_next):
