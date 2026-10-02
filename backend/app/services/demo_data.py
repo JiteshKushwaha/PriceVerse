@@ -85,4 +85,4 @@ def generate_items(query: str) -> dict[str, list[dict]]:
                 "pid": f"DEMO{_seed(query, site, str(v)) % 10**8}", "source": "demo", "in_stock": rnd.random() > 0.08,
             })
         out[site] = items
-    return outs
+    return out
