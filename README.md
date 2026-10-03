@@ -1,4 +1,4 @@
-# 🕸️ PriceVerse: E-Commerce Price Comparison & Product Recommendation System
+# 🕸️ PriceVerse : E-Commerce Price Comparison & Product Recommendation System
 
 Academic project (Data Engineering Honours, *Web Scraping & APIs*). You search for a product. PriceVerse finds it on Google and on 8 Indian stores, scrapes and cleans the listings, ranks them, and links you to the best deal.
 
